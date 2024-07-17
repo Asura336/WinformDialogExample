@@ -46,15 +46,24 @@ public class Main : MonoBehaviour
             RedirectStandardOutput = true,
             StandardOutputEncoding = System.Text.Encoding.UTF8,
         };
-        m_process = Process.Start(startInfo);
-        m_process.OutputDataReceived += Process_OutputDataReceived; ;
+        //m_process = Process.Start(startInfo);
+        m_process = new Process
+        {
+            StartInfo = startInfo
+        };
+        m_process.OutputDataReceived += Process_OutputDataReceived;
+        m_process.Start();
+        m_process.BeginOutputReadLine();
 
         // then start pipe 
         StartCoroutine(DoConnect(pipeSrcName, pipeListenerName));
     }
     private void Process_OutputDataReceived(object sender, System.Diagnostics.DataReceivedEventArgs e)
     {
-        Debug.Log($"[Console] {e.Data}");
+        if (!string.IsNullOrEmpty(e.Data))
+        {
+            Debug.Log($"[Console] {e.Data}");
+        }
     }
     IEnumerator DoConnect(string pipeSrcName, string pipeListenerName)
     {
