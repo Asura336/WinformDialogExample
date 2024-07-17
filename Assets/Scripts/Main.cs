@@ -18,6 +18,8 @@ public class Main : MonoBehaviour
     public int width = 200;
     public int height = 200;
 
+    public bool showExeWindow = false;
+
     PipeClientMessageSource m_messageSource;
     PipeClientListener m_listener;
     Process m_process;
@@ -41,19 +43,27 @@ public class Main : MonoBehaviour
         {
             FileName = path,
             Arguments = $"{pipeSrcName} {pipeListenerName}",
-            CreateNoWindow = true,
-            UseShellExecute = false,
-            RedirectStandardOutput = true,
-            StandardOutputEncoding = System.Text.Encoding.UTF8,
         };
-        //m_process = Process.Start(startInfo);
+        if (!showExeWindow)
+        {
+            startInfo.CreateNoWindow = true;
+            startInfo.UseShellExecute = false;
+            startInfo.RedirectStandardOutput = true;
+            startInfo.StandardOutputEncoding = System.Text.Encoding.UTF8;
+        }
         m_process = new Process
         {
             StartInfo = startInfo
         };
-        m_process.OutputDataReceived += Process_OutputDataReceived;
+        if (!showExeWindow)
+        {
+            m_process.OutputDataReceived += Process_OutputDataReceived;
+        }
         m_process.Start();
-        m_process.BeginOutputReadLine();
+        if (!showExeWindow)
+        {
+            m_process.BeginOutputReadLine();
+        }
 
         // then start pipe 
         StartCoroutine(DoConnect(pipeSrcName, pipeListenerName));
@@ -150,16 +160,17 @@ public class Main : MonoBehaviour
         string msgResult = null;
         for (float t = 0; t < 10f; t += Time.deltaTime)
         {
-            if (m_messageResults.TryGetValue(msgId, out var res))
+            if (m_messageResults.TryGetValue(msgId, out var res) && res != null)
             {
                 msgResult = res.Value<string>();
-                goto LoopEnd;
+                goto Finally;
             }
             yield return null;
         }
-        Debug.Log($"[MessageBox] Id({msgId}) 过期");
+        Debug.Log($"[MessageBox] Id({msgId}) timeout");
 
-LoopEnd:
+Finally:
+        m_messageResults.Remove(msgId);
         Debug.Log($"MessageBox => {msgResult}");
     }
 
@@ -189,23 +200,30 @@ LoopEnd:
             {
                 if (m_messageResults.TryGetValue(msgId, out var res))
                 {
+                    if (res == null)
+                    {
+                        Debug.Log("OpenFile => Cancel");
+                        goto Finally;
+                    }
                     switch (res.Type)
                     {
                         case JTokenType.Array:
                             string[] files = res.Values().Select(t => t.Value<string>()).ToArray();
                             Debug.Log($"OpenFile => [{string.Join(", ", files.Select(s => $"\"{s}\""))}]");
-                            goto LoopEnd;
+                            goto Finally;
                         default:
                             // as string
                             string file = res.Value<string>();
                             Debug.Log($"OpenFile => \"{file}\"");
-                            goto LoopEnd;
+                            goto Finally;
                     }
                 }
+
                 yield return null;
             }
-            Debug.Log($"[OpenFile] Id({msgId}) 过期");
-LoopEnd:
+            Debug.Log($"[OpenFile] Id({msgId}) timeout");
+Finally:
+            m_messageResults.Remove(msgId);
             yield break;
         }
     }
