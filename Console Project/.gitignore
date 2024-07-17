@@ -1,0 +1,9 @@
+# VS Program
+
+bin
+obj
+
+*.vs
+
+!*.sln
+!*.csproj

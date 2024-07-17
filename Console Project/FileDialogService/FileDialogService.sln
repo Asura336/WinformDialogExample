@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34622.214
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FormConsole", "FormConsole\FormConsole.csproj", "{FE398F9A-9D57-4E26-9084-3E814EF50DBE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FE398F9A-9D57-4E26-9084-3E814EF50DBE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE398F9A-9D57-4E26-9084-3E814EF50DBE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE398F9A-9D57-4E26-9084-3E814EF50DBE}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{FE398F9A-9D57-4E26-9084-3E814EF50DBE}.Debug|x64.Build.0 = Debug|Any CPU
+		{FE398F9A-9D57-4E26-9084-3E814EF50DBE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE398F9A-9D57-4E26-9084-3E814EF50DBE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE398F9A-9D57-4E26-9084-3E814EF50DBE}.Release|x64.ActiveCfg = Release|Any CPU
+		{FE398F9A-9D57-4E26-9084-3E814EF50DBE}.Release|x64.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5C59AF12-EE2A-4CE6-B429-AFEA0D29F5CA}
+	EndGlobalSection
+EndGlobal
